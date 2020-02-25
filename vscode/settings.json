@@ -1,0 +1,39 @@
+{
+    "editor.fontSize": 15,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "editor.renderControlCharacters": true,
+    "editor.tokenColorCustomizations": {
+        "comments": "#888888",
+        "types": "#fbf7c2",
+        "numbers": "#4fc08d",
+        // "strings": "#4fc08d"
+    },
+    "git.autofetch": true,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "gitlens.gitCommands.closeOnFocusOut": true,
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "explorer.confirmDragAndDrop": false,
+    "terminal.integrated.fontSize": 14,
+    "workbench.tree.indent": 14,
+    "window.zoomLevel": 0,
+    "workbench.colorTheme": "Zeus-Sublime-Text",
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.colorCustomizations": {
+        "editorWhitespace.foreground": "#5f5f5f",
+        "editorIndentGuide.activeBackground": "#5f5f5f",
+        "editorIndentGuide.background": "#5f5f5f",
+        "editor.selectionBackground": "#4fc08d"
+    },
+    "files.eol": "\n",
+    "editor.tabSize": 2,
+    "editor.trimAutoWhitespace": false,
+    "diffEditor.ignoreTrimWhitespace": false
+}
