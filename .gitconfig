@@ -1,0 +1,16 @@
+[user]
+	name = araihara-k
+	email = araihara@gmail.com
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+[alias]
+  br = branch
+	co = checkout
+	st = status
+  lo = log --pretty='format:%C(yellow)%h %C(green)%cd %C(reset)%s %C(red)%d %C(cyan)[%an]' --date=iso
+	fe = fetch
+	com = commit
+[core]
+	excludesfile = ~/.gitignore
