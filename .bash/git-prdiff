@@ -1,0 +1,83 @@
+#!/bin/bash
+
+function print_usage(){
+    cat <<__EOD__
+
+NAME
+    git-prdiff.github - 指定したタグ間にマージされた pull request を抽出する（GitHub 版）
+
+SYNOPSIS
+    git prdiff [OPTIONS] [[FROM] TO]
+
+DESCRIPTION
+    FROM と TO の間にマージされた pull request を抽出して表示します．
+    FROM が省略された場合は TO の直前のタグが使用されます．
+    TO が省略された場合は，最新の origin/master からたどった直近のタグが使用されます．
+    リモートの情報を参照する場合は，事前に git fetch を実行して，最新の状態と同期してください．
+
+OPTIONS
+    --usage
+        このヘルプを表示します
+
+__EOD__
+}
+
+function is_valid(){
+    git rev-parse --verify "$1" >/dev/null 2>&1
+}
+
+function sha1(){
+    git rev-parse --short "$1"
+}
+
+function get_repository(){
+    REPO="$(basename "$(git config remote.origin.url)")"
+    echo "${REPO%.git}"
+}
+
+while [[ -n "$1" ]]; do
+    case "$1" in
+    --usage)
+        print_usage
+        exit 0
+        ;;
+    -*)
+        print_usage >&2
+        exit 1
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+
+# TO:   引数が2つ以上あれば2番目，1つなら1番目，なければ origin/master からの直近のタグ
+TO=${2:-${1:-$(git describe --abbrev=0 origin/master)}}
+
+if ! is_valid "$TO"; then
+    echo "[error] invalid object name: $TO" >&2
+    exit 1
+fi
+
+
+# FROM: 指定がなければ $TO からの直近のタグ
+if [[ $# -lt 2 ]]; then
+    FROM=$(git describe --abbrev=0 $TO~)
+else
+    FROM=$1
+fi
+
+if ! is_valid "$FROM"; then
+    echo "[error] invalid object name: $FROM" >&2
+    exit 1
+fi
+
+
+echo "$FROM ($(sha1 "$FROM")) --> $TO ($(sha1 "$TO"))"
+echo
+
+readonly GITHUB_URL="http:\/\/github.com\/KLabProject\/$(get_repository)"
+git log --first-parent --format='format:||%s||%b%n' $FROM..$TO |
+sed -n -e "s/^||Merge pull request #\([0-9]*\) from .*||\(.*\)\$/$GITHUB_URL\/pull\/\1 (\2)/p"
+echo
